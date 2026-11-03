@@ -1,7 +1,7 @@
 plugins {
-	java
-	id("org.springframework.boot") version "4.1.2"
-	id("io.spring.dependency-management") version "1.1.7"
+	alias(libs.plugins.java)
+	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.dependency.management)
 }
 
 group = "com.example"
@@ -9,7 +9,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInt())
 	}
 }
 
@@ -18,18 +18,20 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-webmvc")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation(libs.spring.boot.starter.webmvc)
+	implementation(libs.spring.boot.starter.data.jpa)
 	// Core Spring Security support
-	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation(libs.spring.boot.starter.security)
 	// Essential utilities for testing secured endpoints
-	implementation("org.springframework.boot:spring-boot-starter-validation")
-	implementation("org.mapstruct:mapstruct:1.6.3")
-	annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
-	testImplementation ("org.springframework.security:spring-security-test")
-	runtimeOnly("org.postgresql:postgresql")
-	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	implementation(libs.spring.boot.starter.validation)
+	implementation(libs.mapstruct.api)
+	annotationProcessor(libs.mapstruct.processor)
+	implementation(libs.jakarta.mail.api)
+	implementation(libs.angus.mail)
+	testImplementation(libs.spring.security.test)
+	runtimeOnly(libs.postgresql)
+	testImplementation(libs.spring.boot.starter.webmvc.test)
+	testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.withType<Test> {
