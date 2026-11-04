@@ -17,6 +17,12 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
+	}
+}
+
 dependencies {
 	implementation(libs.spring.boot.starter.webmvc)
 	implementation(libs.spring.boot.starter.data.jpa)
@@ -25,9 +31,11 @@ dependencies {
 	// Essential utilities for testing secured endpoints
 	implementation(libs.spring.boot.starter.validation)
 	implementation(libs.mapstruct.api)
+	implementation(libs.spring.boot.starter.oauth2 )
 	annotationProcessor(libs.mapstruct.processor)
-	implementation(libs.jakarta.mail.api)
-	implementation(libs.angus.mail)
+	implementation(libs.spring.boot.starter.mail)
+	compileOnly(libs.lombok)
+	annotationProcessor(libs.lombok)
 	testImplementation(libs.spring.security.test)
 	runtimeOnly(libs.postgresql)
 	testImplementation(libs.spring.boot.starter.webmvc.test)
