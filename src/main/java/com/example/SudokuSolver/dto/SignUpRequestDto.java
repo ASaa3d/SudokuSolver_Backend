@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.Optional;
 
-public record UserRequestDto(
+public record SignUpRequestDto(
         @NotBlank String userName,
-        Optional<String> email,
+        @NotBlank String email,
         Optional<String> phone,
         @NotBlank String password
 ) {}
