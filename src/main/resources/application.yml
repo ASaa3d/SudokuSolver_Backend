@@ -4,7 +4,7 @@ server:
 app:
   jwt:
     issuer: https://sudokusolver.com
-    access-ttl: ${TOKEN_TIME:1d}
+    access-ttl: ${ACCESS_TTL:30m}
     private-key: ${PRIVATE_KEY_PATH:classpath:keys/private.pem}
     public-key: classpath:keys/public.pem
 
