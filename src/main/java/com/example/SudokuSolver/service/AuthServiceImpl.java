@@ -80,6 +80,7 @@ public class AuthServiceImpl implements AuthService {
         return userMapper.toResponseDto(savedUser);
     }
 
+
     @Override
     @Transactional
     public void verifyAccount(Long userId, String code) {

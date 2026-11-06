@@ -11,11 +11,7 @@ import com.example.SudokuSolver.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -24,6 +20,11 @@ import java.net.URI;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
+
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("pong");
+    }
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> login(@RequestBody @Valid LogInRequestDto request) {
