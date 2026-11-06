@@ -1,5 +1,4 @@
 rootProject.name = "SudokuSolver"
-
 dependencyResolutionManagement {
 	versionCatalogs {
 		create("libs") {

@@ -1,11 +1,17 @@
 package com.example.SudokuSolver.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 
 @Entity
 @Table(name = "verification_tokens")
+@Getter
+@Setter
+@NoArgsConstructor
 public class VerificationToken {
 
     @Id
@@ -16,8 +22,8 @@ public class VerificationToken {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "code_hash", nullable = false)
-    private String codeHash;
+    @Column(name = "code", nullable = false)
+    private String code;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -26,52 +32,11 @@ public class VerificationToken {
     @Column(name = "expires_at", nullable = false)
     private Instant expiresAt;
 
-    public VerificationToken(){}
-
-    public VerificationToken(User user, String codeHash, TokenType type, Instant expiresAt) {
+    public VerificationToken(User user, String code, TokenType type, Instant expiresAt) {
         this.user = user;
-        this.codeHash = codeHash;
+        this.code = code;
         this.type = type;
         this.expiresAt = expiresAt;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getCodeHash() {
-        return codeHash;
-    }
-
-    public void setCodeHash(String codeHash) {
-        this.codeHash = codeHash;
-    }
-
-    public TokenType getType() {
-        return type;
-    }
-
-    public void setType(TokenType type) {
-        this.type = type;
-    }
-
-    public Instant getExpiresAt() {
-        return expiresAt;
-    }
-
-    public void setExpiresAt(Instant expiresAt) {
-        this.expiresAt = expiresAt;
-    }
 }

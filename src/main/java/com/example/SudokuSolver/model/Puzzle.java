@@ -1,16 +1,22 @@
 package com.example.SudokuSolver.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name="puzzle")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Puzzle {
     @Id
-    private String id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
+    private String name;
     private int size;
     private String grid;
     private LocalDateTime creationDate;

@@ -2,5 +2,5 @@ app:
   jwt:
     issuer: https://api.example.com
     access-ttl: 15m
-    private-key: classpath:keys/private.pem   # better: mounted secret / Vault
+    private-key: classpath:keys/private.pem
     public-key: classpath:keys/public.pem

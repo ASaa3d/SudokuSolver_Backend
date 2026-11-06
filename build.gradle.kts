@@ -25,6 +25,8 @@ configurations {
 
 dependencies {
 	implementation(libs.spring.boot.starter.webmvc)
+	implementation(libs.spring.boot.starter.webmvc.ui)
+
 	implementation(libs.spring.boot.starter.data.jpa)
 	// Core Spring Security support
 	implementation(libs.spring.boot.starter.security)
@@ -32,10 +34,10 @@ dependencies {
 	implementation(libs.spring.boot.starter.validation)
 	implementation(libs.mapstruct.api)
 	implementation(libs.spring.boot.starter.oauth2 )
-	annotationProcessor(libs.mapstruct.processor)
 	implementation(libs.spring.boot.starter.mail)
 	compileOnly(libs.lombok)
 	annotationProcessor(libs.lombok)
+	annotationProcessor(libs.mapstruct.processor)
 	testImplementation(libs.spring.security.test)
 	runtimeOnly(libs.postgresql)
 	testImplementation(libs.spring.boot.starter.webmvc.test)

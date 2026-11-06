@@ -1,13 +1,17 @@
 package com.example.SudokuSolver.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "friendships")
+@Table(name = "friendships", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "friend_id"}))
+@Getter
+@Setter
+@NoArgsConstructor
 public class Friendship {
 
     @Id
@@ -27,43 +31,4 @@ public class Friendship {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getFriend() {
-        return friend;
-    }
-
-    public void setFriend(User friend) {
-        this.friend = friend;
-    }
-
-    public FriendshipStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(FriendshipStatus status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface VerificationTokenRepository extends JpaRepository<VerificationToken,Long> {
-    Optional<VerificationToken> findTopByUserAndTypeAndUsedAtIsNullOrderByExpiresAtDesc(User user, TokenType type);
+    Optional<VerificationToken> findByCodeAndType(String code, TokenType type);
+    Optional<VerificationToken> findByUser_IdAndCodeAndType(Long userId, String code, TokenType type);
+    Optional<VerificationToken> findTopByUserAndTypeOrderByExpiresAtDesc(User user, TokenType type);
     void deleteByUserAndType(User user, TokenType type);
 }

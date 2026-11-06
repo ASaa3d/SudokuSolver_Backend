@@ -1,6 +1,5 @@
-package com.example.SudokuSolver.service;
+package com.example.SudokuSolver.config.jwt;
 
-import com.example.SudokuSolver.config.jwt.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -17,12 +16,12 @@ public class JwtTokenService {
     private final JwtEncoder encoder;
     private final JwtProperties props;
 
-    public String generateAccessToken(String userId) {
+    public String generateAccessToken(Long userId) {
         Instant now = Instant.now();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer(props.issuer())
-                .subject(userId)
+                .subject(userId.toString())
                 .issuedAt(now)
                 .expiresAt(now.plus(props.accessTtl()))
                 .build();

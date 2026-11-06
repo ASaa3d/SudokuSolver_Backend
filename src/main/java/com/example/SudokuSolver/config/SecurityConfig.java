@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())   // OK for header-based stateless APIs; NOT if tokens live in cookies
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers("/auth/login", "/auth/refresh").permitAll()
+                        .requestMatchers("/auth/**","/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/sudoku/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(o -> o
                         .jwt(Customizer.withDefaults())
