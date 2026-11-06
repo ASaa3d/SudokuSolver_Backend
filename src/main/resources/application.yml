@@ -4,3 +4,11 @@ app:
     access-ttl: 15m
     private-key: ${PRIVATE_KEY_PATH:classpath:keys/private.pem}
     public-key: classpath:keys/public.pem
+
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
+      idle-timeout: 30000
+      max-lifetime: 600000
