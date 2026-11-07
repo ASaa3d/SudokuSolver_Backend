@@ -45,11 +45,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenResponseDto login(LogInRequestDto request) {
-        User user = userRepository.findByEmailOrPhone(request.emailOrPhone()).orElseThrow(
-                () -> new UnauthorizedException("Invalid email, phone, or password.")
+        User user = userRepository.findByEmail(request.email()).orElseThrow(
+                () -> new UnauthorizedException("Invalid email or password.")
         );
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new UnauthorizedException("Invalid email, phone, or password.");
+            throw new UnauthorizedException("Invalid email or password.");
         }
         return new TokenResponseDto(jwtTokenService.generateAccessToken(user.getId()));
     }
@@ -60,16 +60,9 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new ConflictException("Email is already registered: " + request.email());
         }
-        Optional<String> requestedPhone = Optional.ofNullable(request.phone()).orElseGet(Optional::empty);
-        requestedPhone.ifPresent(phone -> {
-            if (userRepository.findByPhone(phone).isPresent()) {
-                throw new ConflictException("Phone number is already registered: " + phone);
-            }
-        });
 
         User user = userMapper.toEntity(request);
         user.setEmail(request.email());
-        user.setPhone(requestedPhone.orElse(null));
         user.setPassword(passwordEncoder.encode(request.password()));
         User savedUser = userRepository.save(user);
         String token = createToken(savedUser, TokenType.ACCOUNT_VERIFICATION);
@@ -80,8 +73,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void verifyAccount(Long userId, String code) {
-        VerificationToken verificationToken = findValidAccountVerificationToken(userId, code);
+    public void verifyAccount(String email, String code) {
+        User currUser = userRepository.findByEmail(email).orElseThrow(
+                () -> new UnauthorizedException("Email not known")
+        );
+        VerificationToken verificationToken = findValidAccountVerificationToken(currUser.getId(), code);
         verificationToken.getUser().setAccountVerified(true);
         verificationTokenRepository.deleteByUserAndType(verificationToken.getUser(), TokenType.ACCOUNT_VERIFICATION);
     }
@@ -101,10 +97,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void forgotPassword(String emailOrPhone) {
-        Optional<User> matchingUser = userRepository.findByEmail(emailOrPhone)
-                .or(() -> userRepository.findByPhone(emailOrPhone));
-        if (matchingUser.isEmpty() || matchingUser.get().getEmail() == null) {
+    public void forgotPassword(String email) {
+        Optional<User> matchingUser = userRepository.findByEmail(email);
+        if (matchingUser.isEmpty()) {
             return;
         }
 
@@ -120,8 +115,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void resetPassword(String emailOrPhone, String newPassword, String code) {
-        User user = userRepository.findByEmail(emailOrPhone)
+    public void resetPassword(String email, String newPassword, String code) {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadRequestException("The token is invalid or has expired."));
         VerificationToken resetToken = findValidPasswordResetToken(user.getId(), code);
         resetToken.getUser().setPassword(passwordEncoder.encode(newPassword));

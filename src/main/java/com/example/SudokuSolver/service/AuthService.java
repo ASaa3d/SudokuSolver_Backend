@@ -5,8 +5,8 @@ import com.example.SudokuSolver.dto.*;
 public interface AuthService {
     TokenResponseDto login(LogInRequestDto request);
     SignUpResponseDto signUp(SignUpRequestDto request);
-    void verifyAccount(Long userId, String code);
+    void verifyAccount(String email, String code);
     void sendVerificationToken(Long userId);
-    void forgotPassword(String emailOrPhone);
-    void resetPassword(String emailOrPhone, String newPassword, String code);
+    void forgotPassword(String email);
+    void resetPassword(String email, String newPassword, String code);
 }

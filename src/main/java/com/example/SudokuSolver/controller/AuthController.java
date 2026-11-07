@@ -32,8 +32,8 @@ public class AuthController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<Void> verify(@RequestBody @Valid VerifyAccountRequestDto request) {
-        authService.verifyAccount(request.userId(), request.code());
+    public ResponseEntity<Void> verify(@RequestBody @Valid VerifyEmailRequestDto request) {
+        authService.verifyAccount(request.email(), request.code());
         return ResponseEntity.noContent().build();
     }
 
@@ -45,13 +45,13 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<Void> forgotPassword(@RequestBody @Valid ForgotPasswordRequestDto request) {
-        authService.forgotPassword(request.emailOrPhone());
+        authService.forgotPassword(request.email());
         return ResponseEntity.accepted().build();
     }
 
     @PostMapping("/reset-password")
     public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordRequestDto request) {
-        authService.resetPassword(request.emailOrPhone(), request.newPassword(), request.code());
+        authService.resetPassword(request.email(), request.newPassword(), request.code());
         return ResponseEntity.noContent().build();
     }
 }

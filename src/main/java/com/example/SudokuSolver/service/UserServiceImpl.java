@@ -1,7 +1,6 @@
 package com.example.SudokuSolver.service;
 
 import com.example.SudokuSolver.config.ExceptionHandling.BadRequestException;
-import com.example.SudokuSolver.config.ExceptionHandling.ConflictException;
 import com.example.SudokuSolver.config.ExceptionHandling.NotFoundException;
 import com.example.SudokuSolver.dto.UpdateProfileRequestDto;
 import com.example.SudokuSolver.dto.UserResponseDto;
@@ -35,14 +34,6 @@ public class UserServiceImpl implements UserService {
         }
         if (request.imgUrl() != null) {
             user.setImgUrl(request.imgUrl());
-        }
-        if (request.phone() != null) {
-            userRepository.findByPhone(request.phone())
-                    .filter(existingUser -> !existingUser.getId().equals(userId))
-                    .ifPresent(existingUser -> {
-                        throw new ConflictException("Phone number is already registered: " + request.phone());
-                    });
-            user.setPhone(request.phone());
         }
         return userMapper.toResponseDto(user);
     }

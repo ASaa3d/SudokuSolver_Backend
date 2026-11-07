@@ -27,8 +27,6 @@ public class User {
     private String userName;
     @Column(name="email", nullable = false,unique = true)
     private String email;
-    @Column(name="phone", nullable = true,unique = true)
-    private String phone;
     @Column(name = "account_verified", nullable = false)
     private boolean accountVerified = false;
     private String password;
