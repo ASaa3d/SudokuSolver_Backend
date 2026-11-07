@@ -1,6 +1,7 @@
 package com.example.SudokuSolver.mapper;
 
 import com.example.SudokuSolver.dto.SignUpRequestDto;
+import com.example.SudokuSolver.dto.SignUpResponseDto;
 import com.example.SudokuSolver.dto.UserResponseDto;
 import com.example.SudokuSolver.model.User;
 import org.mapstruct.Mapper;
@@ -25,5 +26,5 @@ public interface UserMapper {
 
     // User Entity -> Response DTO
     UserResponseDto toResponseDto(User entity);
-    UserResponseDto toSignUpResponseDto(User entity);
+    SignUpResponseDto toSignUpResponseDto(User entity);
 }

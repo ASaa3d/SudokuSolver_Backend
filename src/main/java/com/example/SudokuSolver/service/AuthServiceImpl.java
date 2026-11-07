@@ -5,10 +5,7 @@ import com.example.SudokuSolver.config.ExceptionHandling.BadRequestException;
 import com.example.SudokuSolver.config.ExceptionHandling.ConflictException;
 import com.example.SudokuSolver.config.ExceptionHandling.UnauthorizedException;
 import com.example.SudokuSolver.config.jwt.JwtTokenService;
-import com.example.SudokuSolver.dto.LogInRequestDto;
-import com.example.SudokuSolver.dto.SignUpRequestDto;
-import com.example.SudokuSolver.dto.TokenResponseDto;
-import com.example.SudokuSolver.dto.UserResponseDto;
+import com.example.SudokuSolver.dto.*;
 import com.example.SudokuSolver.mapper.UserMapper;
 import com.example.SudokuSolver.model.TokenType;
 import com.example.SudokuSolver.model.User;
@@ -59,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public UserResponseDto signUp(SignUpRequestDto request) {
+    public SignUpResponseDto signUp(SignUpRequestDto request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new ConflictException("Email is already registered: " + request.email());
         }

@@ -1,12 +1,6 @@
 package com.example.SudokuSolver.controller;
 
-import com.example.SudokuSolver.dto.ForgotPasswordRequestDto;
-import com.example.SudokuSolver.dto.LogInRequestDto;
-import com.example.SudokuSolver.dto.ResetPasswordRequestDto;
-import com.example.SudokuSolver.dto.SignUpRequestDto;
-import com.example.SudokuSolver.dto.TokenResponseDto;
-import com.example.SudokuSolver.dto.UserResponseDto;
-import com.example.SudokuSolver.dto.VerifyAccountRequestDto;
+import com.example.SudokuSolver.dto.*;
 import com.example.SudokuSolver.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +26,8 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signUp(@RequestBody @Valid SignUpRequestDto request) {
-        UserResponseDto user = authService.signUp(request);
+    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody @Valid SignUpRequestDto request) {
+        SignUpResponseDto user = authService.signUp(request);
         return ResponseEntity.created(URI.create("/api/users/" + user.id())).body(user);
     }
 
