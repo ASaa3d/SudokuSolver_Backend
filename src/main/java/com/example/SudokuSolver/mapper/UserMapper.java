@@ -25,4 +25,5 @@ public interface UserMapper {
 
     // User Entity -> Response DTO
     UserResponseDto toResponseDto(User entity);
+    UserResponseDto toSignUpResponseDto(User entity);
 }

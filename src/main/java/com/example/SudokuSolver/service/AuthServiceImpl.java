@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
         User savedUser = userRepository.save(user);
         String token = createToken(savedUser, TokenType.ACCOUNT_VERIFICATION);
         sendToken(savedUser, token, "Verify your account");
-        return userMapper.toResponseDto(savedUser);
+        return userMapper.toSignUpResponseDto(savedUser);
     }
 
 
