@@ -102,7 +102,6 @@ public class AuthServiceImpl implements AuthService {
         if (matchingUser.isEmpty()) {
             return;
         }
-
         User user = matchingUser.get();
         String token = createToken(user, TokenType.PASSWORD_RESET);
         try {
@@ -115,12 +114,19 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void resetPassword(String email, String newPassword, String code) {
+    public void validatePasswordResetCode(String email, String code) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadRequestException("The token is invalid or has expired."));
-        VerificationToken resetToken = findValidPasswordResetToken(user.getId(), code);
-        resetToken.getUser().setPassword(passwordEncoder.encode(newPassword));
-        verificationTokenRepository.deleteByUserAndType(resetToken.getUser(), TokenType.PASSWORD_RESET);
+        findValidPasswordResetToken(user.getId(), code);
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(String email, String newPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new BadRequestException("The token is invalid or has expired."));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        verificationTokenRepository.deleteByUserAndType(user, TokenType.PASSWORD_RESET);
     }
 
     private String createToken(User user, TokenType type) {

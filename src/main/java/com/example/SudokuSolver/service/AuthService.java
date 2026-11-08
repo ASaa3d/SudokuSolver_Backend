@@ -8,5 +8,6 @@ public interface AuthService {
     void verifyAccount(String email, String code);
     void sendVerificationToken(Long userId);
     void forgotPassword(String email);
-    void resetPassword(String email, String newPassword, String code);
+    void validatePasswordResetCode(String email, String code);
+    void resetPassword(String email, String newPassword);
 }
