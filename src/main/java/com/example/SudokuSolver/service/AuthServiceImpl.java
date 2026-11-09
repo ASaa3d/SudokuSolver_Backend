@@ -108,16 +108,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void sendPasswordChangeToken(String email) {
-        Optional<User> matchingUser = userRepository.findByEmail(email);
-        if (matchingUser.isEmpty()) {
-            return;
-        }
-        User user = matchingUser.get();
-        String token = createToken(user, TokenType.PASSWORD_RESET);
+        User matchingUser = userRepository.findByEmail(email).orElseThrow(
+                () -> new UnauthorizedException("Email not Found")
+        );
+        String token = createToken(matchingUser, TokenType.PASSWORD_RESET);
         try {
-            sendToken(user, token, "Reset your password");
+            sendToken(matchingUser, token, "Reset your password");
         } catch (BadGatewayException exception) {
-            verificationTokenRepository.deleteByUserAndType(user, TokenType.PASSWORD_RESET);
+            verificationTokenRepository.deleteByUserAndType(matchingUser, TokenType.PASSWORD_RESET);
             LOGGER.log(Level.WARNING, "Unable to deliver password reset email.", exception);
         }
     }
