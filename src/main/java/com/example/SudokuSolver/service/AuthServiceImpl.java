@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private static final Logger LOGGER = Logger.getLogger(AuthServiceImpl.class.getName());
-    private static final long TOKEN_TTL_MINUTES = 15;
+    private static final long TOKEN_TTL_MINUTES = 10;
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -155,7 +155,7 @@ public class AuthServiceImpl implements AuthService {
         SimpleMailMessage message = new SimpleMailMessage(templateMessage);
         message.setTo(user.getEmail());
         message.setSubject(subject);
-        message.setText("Hello " + user.getUserName() + ",\n\nYour token is: " + token);
+        message.setText("Hello " + user.getUserName() + ",\n\nYour OTP is: " + token + ",\n\nIt will be valid for " + TOKEN_TTL_MINUTES + " minutes");
         try {
             mailSender.send(message);
         } catch (MailException exception) {
