@@ -24,7 +24,6 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -168,11 +167,11 @@ public class AuthServiceImpl implements AuthService {
         return validateExpiration(verificationToken);
     }
 
-    private VerificationToken findValidPasswordResetToken(Long userId, String code) {
+    private void findValidPasswordResetToken(Long userId, String code) {
         VerificationToken verificationToken = verificationTokenRepository
                 .findByUser_IdAndCodeAndType(userId, code, TokenType.PASSWORD_RESET)
                 .orElseThrow(() -> new BadRequestException("Token is invalid or has expired."));
-        return validateExpiration(verificationToken);
+        validateExpiration(verificationToken);
     }
 
     private VerificationToken validateExpiration(VerificationToken verificationToken) {
