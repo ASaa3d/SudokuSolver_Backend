@@ -75,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void verifyAccount(String email, String code) {
         User currUser = userRepository.findByEmail(email).orElseThrow(
-                () -> new UnauthorizedException("Email not known")
+                () -> new UnauthorizedException("Email not Found")
         );
         VerificationToken verificationToken = findValidAccountVerificationToken(currUser.getId(), code);
         verificationToken.getUser().setAccountVerified(true);
@@ -126,7 +126,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void validatePasswordResetCode(String email, String code) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException("The token is invalid or has expired."));
+                .orElseThrow(() -> new BadRequestException("Token is invalid or has expired."));
         findValidPasswordResetToken(user.getId(), code);
     }
 
@@ -134,7 +134,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void resetPassword(String email, String newPassword) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new BadRequestException("The token is invalid or has expired."));
+                .orElseThrow(() -> new BadRequestException("Token is invalid or has expired."));
         user.setPassword(passwordEncoder.encode(newPassword));
         verificationTokenRepository.deleteByUserAndType(user, TokenType.PASSWORD_RESET);
     }
@@ -173,14 +173,14 @@ public class AuthServiceImpl implements AuthService {
     private VerificationToken findValidPasswordResetToken(Long userId, String code) {
         VerificationToken verificationToken = verificationTokenRepository
                 .findByUser_IdAndCodeAndType(userId, code, TokenType.PASSWORD_RESET)
-                .orElseThrow(() -> new BadRequestException("The token is invalid or has expired."));
+                .orElseThrow(() -> new BadRequestException("Token is invalid or has expired."));
         return validateExpiration(verificationToken);
     }
 
     private VerificationToken validateExpiration(VerificationToken verificationToken) {
         if (!verificationToken.getExpiresAt().isAfter(Instant.now())) {
             verificationTokenRepository.delete(verificationToken);
-            throw new BadRequestException("The token is invalid or has expired.");
+            throw new BadRequestException("Token is invalid or has expired.");
         }
         return verificationToken;
     }
