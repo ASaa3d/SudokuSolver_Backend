@@ -84,8 +84,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void sendVerificationToken(Long userId) {
-        User user = userRepository.findById(userId)
+    public void sendVerificationToken(String email) {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadRequestException("User not found."));
         if (user.isAccountVerified()) {
             throw new BadRequestException("The account is already verified.");

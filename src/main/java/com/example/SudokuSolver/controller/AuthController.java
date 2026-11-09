@@ -37,9 +37,9 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/resend-verification/{userId}")
-    public ResponseEntity<Void> resendVerification(@PathVariable Long userId) {
-        authService.sendVerificationToken(userId);
+    @PostMapping("/resend-verification")
+    public ResponseEntity<Void> resendVerification(@RequestBody @Valid ResendVerificationRequestDto request) {
+        authService.sendVerificationToken(request.email());
         return ResponseEntity.noContent().build();
     }
 
