@@ -98,6 +98,16 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void forgotPassword(String email) {
+        sendPasswordChangeToken(email);
+    }
+
+    @Override
+    @Transactional
+    public void resendPasswordChange(String email) {
+        sendPasswordChangeToken(email);
+    }
+
+    private void sendPasswordChangeToken(String email) {
         Optional<User> matchingUser = userRepository.findByEmail(email);
         if (matchingUser.isEmpty()) {
             return;

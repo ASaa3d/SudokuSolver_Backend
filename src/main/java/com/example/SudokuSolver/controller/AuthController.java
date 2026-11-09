@@ -49,6 +49,12 @@ public class AuthController {
         return ResponseEntity.accepted().build();
     }
 
+    @PostMapping("/resend-password-change")
+    public ResponseEntity<Void> resendPasswordChange(@RequestBody @Valid ForgotPasswordRequestDto request) {
+        authService.resendPasswordChange(request.email());
+        return ResponseEntity.accepted().build();
+    }
+
     @PostMapping("/reset-password/validate")
     public ResponseEntity<Void> validateResetPasswordCode(
             @RequestBody @Valid ValidateResetPasswordRequestDto request
