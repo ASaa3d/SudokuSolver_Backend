@@ -3,7 +3,7 @@ name: Ping Render backend
 on:
   schedule:
     # Every 10 minutes (GitHub's minimum is 5; runs can be delayed a few minutes)
-    - cron: "*/10 * * * *"
+    - cron: "7,17,27,37,47,57 * * * *"
   workflow_dispatch: # lets you run it manually from the Actions tab
 
 jobs:
