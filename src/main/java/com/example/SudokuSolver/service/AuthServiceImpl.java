@@ -78,7 +78,7 @@ public class AuthServiceImpl implements AuthService {
         );
         VerificationToken verificationToken = findValidAccountVerificationToken(currUser.getId(), code);
         verificationToken.getUser().setAccountVerified(true);
-//        verificationTokenRepository.deleteByUserAndType(verificationToken.getUser(), TokenType.ACCOUNT_VERIFICATION);
+        verificationTokenRepository.deleteByUserAndType(verificationToken.getUser(), TokenType.ACCOUNT_VERIFICATION);
     }
 
     @Override
