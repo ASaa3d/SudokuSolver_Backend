@@ -6,5 +6,6 @@ import jakarta.validation.constraints.Size;
 
 public record ResetPasswordRequestDto(
         @NotBlank @Email String email,
+        @NotBlank String code,
         @NotBlank @Size(min = 8) String newPassword
 ) {}

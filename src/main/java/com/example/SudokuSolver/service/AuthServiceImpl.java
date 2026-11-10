@@ -78,7 +78,7 @@ public class AuthServiceImpl implements AuthService {
         );
         VerificationToken verificationToken = findValidAccountVerificationToken(currUser.getId(), code);
         verificationToken.getUser().setAccountVerified(true);
-        verificationTokenRepository.deleteByUserAndType(verificationToken.getUser(), TokenType.ACCOUNT_VERIFICATION);
+//        verificationTokenRepository.deleteByUserAndType(verificationToken.getUser(), TokenType.ACCOUNT_VERIFICATION);
     }
 
     @Override
@@ -129,9 +129,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void resetPassword(String email, String newPassword) {
+    public void resetPassword(String email, String code, String newPassword) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new BadRequestException("Token is invalid or has expired."));
+        findValidPasswordResetToken(user.getId(), code);
         user.setPassword(passwordEncoder.encode(newPassword));
         verificationTokenRepository.deleteByUserAndType(user, TokenType.PASSWORD_RESET);
     }
