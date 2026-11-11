@@ -4,6 +4,7 @@ import com.example.SudokuSolver.config.ExceptionHandling.BadGatewayException;
 import com.example.SudokuSolver.config.ExceptionHandling.BadRequestException;
 import com.example.SudokuSolver.config.ExceptionHandling.ConflictException;
 import com.example.SudokuSolver.config.ExceptionHandling.UnauthorizedException;
+import com.example.SudokuSolver.config.FrontendProperties;
 import com.example.SudokuSolver.config.jwt.JwtTokenService;
 import com.example.SudokuSolver.dto.*;
 import com.example.SudokuSolver.mapper.UserMapper;
@@ -19,6 +20,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.security.SecureRandom;
 import java.time.Instant;
@@ -32,6 +34,7 @@ import java.util.logging.Logger;
 public class AuthServiceImpl implements AuthService {
     private static final Logger LOGGER = Logger.getLogger(AuthServiceImpl.class.getName());
     private static final long TOKEN_TTL_MINUTES = 10;
+    private final FrontendProperties frontendProperties;
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -65,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(request.password()));
         User savedUser = userRepository.save(user);
         String token = createToken(savedUser, TokenType.ACCOUNT_VERIFICATION);
-        sendToken(savedUser, token, "Verify your account");
+        sendToken(savedUser, token, "Verify your account", frontendProperties.verifyPasswordPath());
         return userMapper.toSignUpResponseDto(savedUser);
     }
 
@@ -91,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String code = createToken(user, TokenType.ACCOUNT_VERIFICATION);
-        sendToken(user, code, "Verify your account");
+        sendToken(user, code, "Verify your account", frontendProperties.verifyPasswordPath());
     }
 
     @Override
@@ -112,7 +115,7 @@ public class AuthServiceImpl implements AuthService {
         );
         String token = createToken(matchingUser, TokenType.PASSWORD_RESET);
         try {
-            sendToken(matchingUser, token, "Reset your password");
+            sendToken(matchingUser, token, "Reset your password", frontendProperties.resetPasswordPath());
         } catch (BadGatewayException exception) {
             verificationTokenRepository.deleteByUserAndType(matchingUser, TokenType.PASSWORD_RESET);
             LOGGER.log(Level.WARNING, "Unable to deliver password reset email.", exception);
@@ -149,11 +152,20 @@ public class AuthServiceImpl implements AuthService {
         return code;
     }
 
-    private void sendToken(User user, String token, String subject) {
+    private void sendToken(User user, String token, String subject, String frontendPath) {
         SimpleMailMessage message = new SimpleMailMessage(templateMessage);
         message.setTo(user.getEmail());
         message.setSubject(subject);
-        message.setText("Hello " + user.getUserName() + ",\n\nYour OTP is: " + token + ",\n\nIt will be valid for " + TOKEN_TTL_MINUTES + " minutes");
+        String link = UriComponentsBuilder.fromUriString(frontendProperties.baseUrl())
+                .path(frontendPath)
+                .queryParam("email", user.getEmail())
+                .queryParam("code", token)
+                .build()
+                .encode()
+                .toUriString();
+        message.setText("Hello " + user.getUserName() + ",\n\nYour code is: " + token
+                + "\n\nContinue here: " + link
+                + "\n\nIt will be valid for " + TOKEN_TTL_MINUTES + " minutes.");
         try {
             mailSender.send(message);
         } catch (MailException exception) {

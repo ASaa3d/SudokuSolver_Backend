@@ -7,6 +7,10 @@ app:
     access-ttl: ${ACCESS_TTL:30m}
     private-key: ${PRIVATE_KEY_PATH:classpath:keys/private.pem}
     public-key: classpath:keys/public.pem
+  frontend:
+    base-url: ${FRONTEND_BASE_URL:http://localhost:8080}
+    reset-password-path: /reset
+    verify-password-path: /verify-password
 
 spring:
   datasource:

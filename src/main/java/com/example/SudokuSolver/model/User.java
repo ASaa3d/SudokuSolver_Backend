@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,6 +33,8 @@ public class User {
     private String password;
     @CreatedDate
     private LocalDateTime creationDate;
+    @Column(name = "password_changed_at")
+    private LocalDateTime passwordChangedAt;
     @LastModifiedDate
     private LocalDateTime updateDate;
     @Column(name="img_url", nullable = true)
@@ -54,6 +57,14 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserPuzzle> puzzles = new HashSet<>();
+
+    public void setPassword(String password) {
+        this.password = password;
+        if (id != null) {
+            this.passwordChangedAt = LocalDateTime.now(ZoneOffset.UTC).withNano(0);
+        }
+    }
+
     public void solvePuzzle(Long puzzleId) {
         this.puzzles.add(new UserPuzzle(this, puzzleId, LocalDateTime.now()));
         this.streak = this.streak+1;

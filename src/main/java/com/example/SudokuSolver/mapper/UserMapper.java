@@ -14,6 +14,7 @@ public interface UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "email", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
+    @Mapping(target = "passwordChangedAt", ignore = true)
     @Mapping(target = "updateDate", ignore = true)
     @Mapping(target = "imgUrl", ignore = true)
     @Mapping(target = "streak", ignore = true)

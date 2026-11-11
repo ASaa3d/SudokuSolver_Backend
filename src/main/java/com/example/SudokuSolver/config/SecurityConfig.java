@@ -1,15 +1,19 @@
 package com.example.SudokuSolver.config;
 
+import com.example.SudokuSolver.config.jwt.JwtConfig;
+import com.example.SudokuSolver.model.User;
+import com.example.SudokuSolver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,6 +29,7 @@ public class SecurityConfig {
 
     private final AuthenticationEntryPoint jsonAuthEntryPoint;
     private final AccessDeniedHandler jsonAccessDeniedHandler;
+    private final UserRepository userRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**","/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/sudoku/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(o -> o
-                        .jwt(Customizer.withDefaults())
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter()))
                         .authenticationEntryPoint(jsonAuthEntryPoint)
                         .accessDeniedHandler(jsonAccessDeniedHandler));
         return http.build();
@@ -56,8 +61,21 @@ public class SecurityConfig {
     @Bean
     JwtAuthenticationConverter jwtAuthConverter() {
         var converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(jwt ->
-                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            User user = null;
+            if (jwt.getSubject() != null) {
+                try {
+                    user = userRepository.findById(Long.valueOf(jwt.getSubject())).orElse(null);
+                } catch (NumberFormatException ignored) {
+                    // Invalid subjects are rejected below.
+                }
+            }
+            if (!JwtConfig.isValidForPassword(user, jwt)) {
+                throw new OAuth2AuthenticationException(
+                        new OAuth2Error("invalid_token", "Token is invalid after a password change.", null));
+            }
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        });
         return converter;
     }
 }

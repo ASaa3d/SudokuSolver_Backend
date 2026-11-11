@@ -1,5 +1,6 @@
 package com.example.SudokuSolver.config.jwt;
 
+import com.example.SudokuSolver.model.User;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
@@ -12,6 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+
 @Configuration
 public class JwtConfig {
 
@@ -38,5 +43,14 @@ public class JwtConfig {
     @Bean
     JwtDecoder jwtDecoder(RSAPublicKey pub) {
         return NimbusJwtDecoder.withPublicKey(pub).build();
+    }
+
+    public static boolean isValidForPassword(User user, Jwt jwt) {
+        if (user == null || jwt == null || jwt.getIssuedAt() == null) {
+            return false;
+        }
+        LocalDateTime passwordChangedAt = user.getPasswordChangedAt();
+        return passwordChangedAt == null || !jwt.getIssuedAt().isBefore(
+                passwordChangedAt.toInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS));
     }
 }

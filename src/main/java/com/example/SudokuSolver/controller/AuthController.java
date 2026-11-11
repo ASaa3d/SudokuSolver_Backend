@@ -15,6 +15,7 @@ import java.net.URI;
 public class AuthController {
     private final AuthService authService;
 
+
     @GetMapping("/ping")
     public ResponseEntity<String> ping() {
         return ResponseEntity.noContent().build();
