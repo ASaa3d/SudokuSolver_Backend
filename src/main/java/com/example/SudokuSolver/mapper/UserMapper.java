@@ -12,7 +12,6 @@ public interface UserMapper {
 
     // Request DTO -> User Entity
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "email", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "passwordChangedAt", ignore = true)
     @Mapping(target = "updateDate", ignore = true)
