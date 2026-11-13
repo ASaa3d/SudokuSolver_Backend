@@ -4,6 +4,7 @@ import com.example.SudokuSolver.config.jwt.JwtConfig;
 import com.example.SudokuSolver.model.User;
 import com.example.SudokuSolver.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -49,10 +50,11 @@ public class SecurityConfig {
                         .accessDeniedHandler(jsonAccessDeniedHandler));
         return http.build();
     }
+
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource(FrontendProperties props) {
         var config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:8081"));
+        config.setAllowedOrigins(List.of("http://localhost:8080","http://localhost:8081",props.baseUrl()));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
         config.setMaxAge(3600L);
