@@ -43,5 +43,5 @@ Configure key paths and token lifetime with the `app.jwt` settings in `applicati
 
 ## Related projects
 
-- Web/Android app: [Repository](https://github.com/your-username/your-web-frontend-repo)
-- C++/CMake native Sudoku library: [Repository](https://github.com/ASaa3d/SudokuSolver_LIB)
+- Web/Android app: [SudokuSolver](https://github.com/ASaa3d/SudokuSolver)
+- C++/CMake native Sudoku library: [SudokuSolver_LIB](https://github.com/ASaa3d/SudokuSolver_LIB)
