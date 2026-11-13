@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Sudoku logo (dark)">
+  <title>Sudoku logo (dark)</title>
+
+  <defs>
+    <!-- Single-stroke digits, each centered on (0,0) inside roughly a 20x30 box -->
+    <path id="d1" d="M-5 -8 L2 -14 V14"/>
+    <path id="d2" d="M-9 -8 C-9 -16 9 -16 9 -6 C9 0 -9 6 -9 14 H9"/>
+    <path id="d4" d="M5 14 V-14 L-9 5 H10"/>
+    <path id="d5" d="M8 -14 H-6 L-8 -1 C-3 -4 8 -4 9 5 C9 15 -4 17 -9 11"/>
+    <path id="d6" d="M7 -13 C-8 -14 -9 2 -9 6 C-9 17 8 17 8 6 C8 -3 -9 -3 -9 6"/>
+  </defs>
+
+  <!-- Tile: navy #2F4A5A -->
+  <rect width="512" height="512" rx="112" fill="#2F4A5A"/>
+
+  <!-- Inner grid lines: khaki #9C8C6A -->
+  <g stroke="#9C8C6A" stroke-width="8" stroke-linecap="round">
+    <path d="M181 31V481 M331 31V481"/>
+    <path d="M31 181H481 M31 331H481"/>
+  </g>
+
+  <!-- Digits: 1 2 _ / 6 _ _ / _ 4 5, tan #D4CBB5 -->
+  <g fill="none" stroke="#D4CBB5" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <use xlink:href="#d1" transform="translate(106 106) scale(3.2)"/>
+    <use xlink:href="#d2" transform="translate(256 106) scale(3.2)"/>
+    <use xlink:href="#d6" transform="translate(106 256) scale(3.2)"/>
+    <use xlink:href="#d4" transform="translate(256 406) scale(3.2)"/>
+    <use xlink:href="#d5" transform="translate(406 406) scale(3.2)"/>
+  </g>
+
+  <!-- Outer frame: cream #F8F5EE -->
+  <rect x="31" y="31" width="450" height="450" rx="20" fill="none" stroke="#F8F5EE" stroke-width="14"/>
+</svg>
