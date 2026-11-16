@@ -26,12 +26,18 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -r spring && useradd -r -g spring -m spring
+
+# NEW: secrets directory owned by the app user, plus the entrypoint script
+RUN mkdir -p /etc/secrets && chown spring:spring /etc/secrets
+COPY entrypoint.sh /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
+
 USER spring:spring
 
 COPY --from=build /app/build/libs/*.jar app.jar
-
 COPY --from=build /app/src/main/resources/ca.pem /app/src/main/resources/ca.pem
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
+# CHANGED: the script now starts java
+ENTRYPOINT ["/entrypoint.sh"]
