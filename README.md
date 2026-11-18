@@ -6,7 +6,7 @@ Spring Boot REST API for Sudoku solving, user accounts, and puzzle-related featu
 <img width="1462" height="962" alt="image" src="https://github.com/user-attachments/assets/6b280d6d-2b12-492a-bb97-386a05952ecc" />
 
 
-Explore the interactive Swagger UI: [Sudoku Solver API](https://sudokusolver-backend-83nr.onrender.com/swagger-ui.html).
+Explore the interactive Swagger UI: [Sudoku Solver API](https://sudokusolver-backend-kfr7.vercel.app/swagger-ui.html).
 
 The API is hosted on Render, where the instance may spin down while idle. The first request after a period of inactivity can take about a minute while the service wakes up.
 
